@@ -1428,12 +1428,26 @@ function getChartColors() {
   };
 }
 
+// Register a global plugin that fills canvas background — fixes blank charts in dark mode
+Chart.register({
+  id: 'canvasBg',
+  beforeDraw(chart) {
+    const ctx = chart.canvas.getContext('2d');
+    ctx.save();
+    ctx.globalCompositeOperation = 'destination-over';
+    ctx.fillStyle = getComputedStyle(document.documentElement)
+      .getPropertyValue('--color-surface').trim() || '#ffffff';
+    ctx.fillRect(0, 0, chart.canvas.width, chart.canvas.height);
+    ctx.restore();
+  }
+});
+
 function initCharts() {
   const c = getChartColors();
 
   Chart.defaults.font.family = "'DM Sans', sans-serif";
   Chart.defaults.font.size = 12;
-  Chart.defaults.color = c.textMuted;
+  Chart.defaults.color = c.text;
 
   // Reach vs Impressions — Doughnut
   const ctx1 = document.getElementById('reachChart').getContext('2d');
@@ -1560,8 +1574,13 @@ function redrawCharts() {
 
 // ─── State Encoding & Seller URL ──────────────────────────────
 function encodeState() {
-  try { return btoa(unescape(encodeURIComponent(JSON.stringify(state)))); }
-  catch(e) { return ''; }
+  try {
+    // Exclude sites/cities — report.html has its own defaults; they bloat the URL unnecessarily
+    const slim = Object.assign({}, state);
+    delete slim.sites;
+    delete slim.cities;
+    return btoa(unescape(encodeURIComponent(JSON.stringify(slim))));
+  } catch(e) { return ''; }
 }
 
 // openTab: works even inside sandboxed iframes where window.open() is blocked
