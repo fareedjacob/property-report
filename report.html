@@ -1219,6 +1219,11 @@ let state = {
   } catch(e) { console.warn('Could not decode state:', e); }
 })();
 
+function fmt(n) {
+  if (n >= 1000) return n.toLocaleString();
+  return n;
+}
+
 function renderDisplay() {
   document.getElementById('display-address').textContent = state.address;
   document.getElementById('display-city').textContent = state.city;
