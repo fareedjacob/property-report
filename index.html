@@ -1590,32 +1590,15 @@ function openGmail() {
   const sellerName = state.sellerName ? state.sellerName.split(' ')[0] : 'there';
   const subject = encodeURIComponent('Your Property Marketing Report — ' + state.address);
   const body = encodeURIComponent(
-    'Hi ' + sellerName + ',
-
-' +
-    'Please find your digital marketing performance report for ' + state.address + ' below.
-
-' +
-    '→ View your report online:
-' + url + '
-
-' +
-    'This report covers ' + state.period + ' and includes:
-' +
-    '• Facebook & Instagram ad reach and impressions
-' +
-    '• MLS listing views across all platforms
-' +
-    '• Buyer interest by city and top websites
-
-' +
-    "Don't hesitate to reach out if you have any questions.
-
-" +
-    'Best regards,
-' + state.agentName + '
-' + state.agentTitle + '
-' + state.agentPhone
+    'Hi ' + sellerName + ',\n\n' +
+    'Please find your digital marketing performance report for ' + state.address + ' below.\n\n' +
+    '\u2192 View your report online:\n' + url + '\n\n' +
+    'This report covers ' + state.period + ' and includes:\n' +
+    '\u2022 Facebook & Instagram ad reach and impressions\n' +
+    '\u2022 MLS listing views across all platforms\n' +
+    '\u2022 Buyer interest by city and top websites\n\n' +
+    "Don't hesitate to reach out if you have any questions.\n\n" +
+    'Best regards,\n' + state.agentName + '\n' + state.agentTitle + '\n' + state.agentPhone
   );
   const to = encodeURIComponent(state.sellerEmail || '');
   openTab('https://mail.google.com/mail/?view=cm&fs=1&to=' + to + '&su=' + subject + '&body=' + body);
